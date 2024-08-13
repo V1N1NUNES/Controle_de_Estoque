@@ -17,6 +17,10 @@ typedef struct{
     product cosmetico[tam];
     product alimenticio[tam];
 } categoria;
+int quant_tec=0;
+int quant_cosm=0;
+int quant_ali=0;
+
 
 // projeto de funções
 void menu();
@@ -26,19 +30,63 @@ void atualizar();
 void remover_produto();
 void limpar_buffer();
 
+
 // funções
-void limpar_buffer(){
+void limpar_buffer(){//(ok)
     int clean;
     while ((clean = getchar()) != '\n' && clean != EOF)
         ;
 }
 
 void cadastrar_produto(){
-    printf("ainda vou fazer a função");
-    exit(1); 
+
+    char cat[20];
+    printf("Digite a categoria do produto que deseja cadastrar:\n");
+    printf("- Tecnologia\n- Cosmetico\n- Alimennticio\n");
+    limpar_buffer();
+    fgets(cat, 20, stdin);
+//verificação do digitado do usuario
+    if(strcmp(cat, "tecnologia") == 0)
+    {
+//verificação de estoque cheio
+        for(int i=0;i<quant_tec;i++){
+            printf("Digite o nome do produto:\n");
+            limpar_buffer();
+            fgets(categoria->tecnologia[i].nome, tam, stdin);
+            printf("Digite o preço de venda do produto:\n");
+            scanf("%f", &categoria->tecnologia[i].preco);
+        }
+
+        
+    }
+    else if(strcmp(cat, "cosmetico") == 0)
+    {
+
+    }
+    else if(strcmp(cat, "alimenticia") == 0)
+    {
+
+    }
+    else//(ok)
+    {
+        printf("Categoria digitada não encontrada.\n");
+        menu();
+    }
+
 }
 
-void menu(){
+//void listar_produto(){
+
+}
+
+//void atualizar(){
+}
+
+//void remover_produto(){
+
+}
+
+void menu(){//(process)
     int opcao;
     do
     {
@@ -68,10 +116,11 @@ void menu(){
         break;
     case 3:
         //atualizar();
+        break;
     case 4:
         //remover_produto();
         break;
-    case 5:
+    case 5://(ok)
         printf("Até logo ;)");
         sleep(1.2);
         exit(1);
