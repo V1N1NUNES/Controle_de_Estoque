@@ -29,6 +29,7 @@ void listar_produto();
 void atualizar();
 void remover_produto();
 void limpar_buffer();
+void remover_newline();
 
 
 // funções
@@ -38,26 +39,39 @@ void limpar_buffer(){//(ok)
         ;
 }
 
-void cadastrar_produto(){
+void remover_newline(char *str) {
+    size_t len = strlen(str);
+    if (len > 0 && str[len-1] == '\n') {
+        str[len-1] = '\0';
+    }
+}
 
+void cadastrar_produto(){
+    categoria estoque;
     char cat[20];
+    char resposta[10];
+
     printf("Digite a categoria do produto que deseja cadastrar:\n");
-    printf("- Tecnologia\n- Cosmetico\n- Alimennticio\n");
+    printf("- Tecnologia\n- Cosmetico\n- Alimenticio\n");
     limpar_buffer();
     fgets(cat, 20, stdin);
+    remover_newline(cat);
+
 //verificação do digitado do usuario
     if(strcmp(cat, "tecnologia") == 0)
     {
 //verificação de estoque cheio
-        for(int i=0;i<quant_tec;i++){
+        do{
+            for(int i=0;i<quant_tec;i++){
             printf("Digite o nome do produto:\n");
             limpar_buffer();
-            fgets(categoria->tecnologia[i].nome, tam, stdin);
+            fgets(estoque.tecnologia[i].nome, tam, stdin);
             printf("Digite o preço de venda do produto:\n");
-            scanf("%f", &categoria->tecnologia[i].preco);
+            scanf("%f", &estoque.tecnologia[i].preco);  
         }
-
-        
+        quant_tec++;
+        }while(strcmp(resposta, "sim") == 0);
+        menu();
     }
     else if(strcmp(cat, "cosmetico") == 0)
     {
@@ -66,25 +80,37 @@ void cadastrar_produto(){
     else if(strcmp(cat, "alimenticia") == 0)
     {
 
-    }
-    else//(ok)
+    }else//deu algum problema
     {
-        printf("Categoria digitada não encontrada.\n");
+        printf("Categoria digitada não encontrada.\n\n\n");
         menu();
     }
 
 }
 
-//void listar_produto(){
+void listar_produto(){
+    char cat[20];
+    categoria estoque;
+
+    printf("Digite a categoria do produto:\n");
+    limpar_buffer();
+    fgets(cat, 20, stdin);
+    if(strcmp(cat, "tecnologia") == 0)
+    {
+//verificação de estoque cheio
+        for(int i=0;i<quant_tec;i++){
+            printf("Nome: %s\n", estoque.tecnologia[i].nome);
+            printf("Preço: %f\n", estoque.tecnologia[i].preco);
+        }
+        menu();
+    }
 
 }
 
 //void atualizar(){
-}
 
 //void remover_produto(){
 
-}
 
 void menu(){//(process)
     int opcao;
