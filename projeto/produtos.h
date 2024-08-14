@@ -31,6 +31,11 @@ void remover_produto();
 void limpar_buffer();
 void remover_newline();
 
+//funções p/ arquivos
+//void escrever()
+//void ler()
+//void mostrar()
+
 
 // funções
 void limpar_buffer(){//(ok)
@@ -50,6 +55,7 @@ void cadastrar_produto(){
     categoria estoque;
     char cat[20];
     char resposta[10];
+    char resp[10];
 
     printf("Digite a categoria do produto que deseja cadastrar:\n");
     printf("- Tecnologia\n- Cosmetico\n- Alimenticio\n");
@@ -58,18 +64,28 @@ void cadastrar_produto(){
     remover_newline(cat);
 
 //verificação do digitado do usuario
-    if(strcmp(cat, "tecnologia") == 0)
+    if(strcmp(cat, "tecnologia") == 0)//pendente
     {
 //verificação de estoque cheio
         do{
-            for(int i=0;i<quant_tec;i++){
+            if(quant_tec >= tam){
+                printf("Estoque cheio.\n");
+                
+            }
             printf("Digite o nome do produto:\n");
             limpar_buffer();
-            fgets(estoque.tecnologia[i].nome, tam, stdin);
+            fgets(estoque.tecnologia[quant_tec].nome, tam, stdin);
             printf("Digite o preço de venda do produto:\n");
-            scanf("%f", &estoque.tecnologia[i].preco);  
-        }
+            scanf("%f", &estoque.tecnologia[quant_tec].preco);  
+        
         quant_tec++;
+
+        printf("Deseja cadastrar mais um produto de tecnologia?:\n");
+        limpar_buffer();
+        fgets(resposta, 10, stdin);
+        if(strcmp(resposta, "nao")==0){
+            menu();
+        }
         }while(strcmp(resposta, "sim") == 0);
         menu();
     }
