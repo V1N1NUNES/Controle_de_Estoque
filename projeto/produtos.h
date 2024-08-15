@@ -5,22 +5,25 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <conio.h>
 #define tam 200
 
 // declarações
-typedef struct{
+typedef struct
+{
     char nome[tam];
     float preco;
 } product;
-typedef struct{
+typedef struct
+{
     product tecnologia[tam];
     product cosmetico[tam];
     product alimenticio[tam];
 } categoria;
-int quant_tec=0;
-int quant_cosm=0;
-int quant_ali=0;
-
+categoria estoque;
+int quant_tec = 0;
+int quant_cosm = 0;
+int quant_ali = 0;
 
 // projeto de funções
 void menu();
@@ -29,106 +32,173 @@ void listar_produto();
 void atualizar();
 void remover_produto();
 void limpar_buffer();
-void remover_newline();
+void remover_newline(char *str);
 
-//funções p/ arquivos
-//void escrever()
-//void ler()
-//void mostrar()
-
+// funções p/ arquivos
+// void escrever()
+// void ler()
+// void mostrar()
 
 // funções
-void limpar_buffer(){//(ok)
+void limpar_buffer()
+{ //(ok)
     int clean;
     while ((clean = getchar()) != '\n' && clean != EOF)
         ;
 }
 
-void remover_newline(char *str) {
+void remover_newline(char *str)
+{ //(ok)
     size_t len = strlen(str);
-    if (len > 0 && str[len-1] == '\n') {
-        str[len-1] = '\0';
+    if (len > 0 && str[len - 1] == '\n')
+    {
+        str[len - 1] = '\0';
     }
 }
 
-void cadastrar_produto(){
-    categoria estoque;
-    char cat[20];
+void cadastrar_produto()
+{
+    char categoria[20];
     char resposta[10];
-    char resp[10];
 
-    printf("Digite a categoria do produto que deseja cadastrar:\n");
-    printf("- Tecnologia\n- Cosmetico\n- Alimenticio\n");
+    printf("\nEscolha a categoria do produto que deseja cadastrar.\n- Tecnologia\n- Cosmetica\n- Alimenticia\n:");
     limpar_buffer();
-    fgets(cat, 20, stdin);
-    remover_newline(cat);
+    fgets(categoria, sizeof(categoria), stdin);
+    remover_newline(categoria);
 
-//verificação do digitado do usuario
-    if(strcmp(cat, "tecnologia") == 0)//pendente
+    if (strcmp(categoria, "tecnologia") == 0 || strcmp(categoria, "Tecnologia") == 0)
     {
-//verificação de estoque cheio
-        do{
-            if(quant_tec >= tam){
-                printf("Estoque cheio.\n");
-                
-            }
-            printf("Digite o nome do produto:\n");
+        do
+        {
+            printf("\nDigite o nome do produto:\n");
+            fgets(estoque.tecnologia[quant_tec].nome, sizeof(estoque.tecnologia[quant_tec].nome), stdin);
+            remover_newline(estoque.tecnologia[quant_tec].nome);
+
+            printf("\nDigite o preço de venda do produto:\n");
+            scanf("%f", &estoque.tecnologia[quant_tec].preco);
             limpar_buffer();
-            fgets(estoque.tecnologia[quant_tec].nome, tam, stdin);
-            printf("Digite o preço de venda do produto:\n");
-            scanf("%f", &estoque.tecnologia[quant_tec].preco);  
-        
-        quant_tec++;
 
-        printf("Deseja cadastrar mais um produto de tecnologia?:\n");
+            printf("Produto cadastrado com sucesso!!\n");
+            quant_tec++;
+
+            if (quant_tec < tam)
+            {
+                printf("Deseja cadastrar mais algum produto no estoque de tecnologia? (sim/nao)\n");
+                fgets(resposta, sizeof(resposta), stdin);
+                remover_newline(resposta);
+
+                if (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    printf("\nVoltando ao Menu...\n");
+                    sleep(1.2);
+                    menu();
+                    return;
+                }
+            }
+            else
+            {
+                printf("estoque cheio.\nRetornando ao menu...\n\n");
+                sleep(1.2);
+                menu();
+                return;
+            }
+        } while (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0);
+
+        menu();
+        return;
+    }
+    else
+    {
+        printf("\nCategoria digitada invalida ou inexistente.\nVoltando ao menu...\n\n");
+        sleep(1.2);
+        menu();
+        return;
+    }
+}
+
+void listar_produto()
+{
+    char resposta[10];
+    char categoria[20];
+
+    do
+    {
+        printf("\nQual a categoria do produto que deseja listar?\n- Tecnologia\n- Cosmetica\n- Alimenticia\n");
         limpar_buffer();
-        fgets(resposta, 10, stdin);
-        if(strcmp(resposta, "nao")==0){
+        fgets(categoria, sizeof(categoria), stdin);
+        remover_newline(categoria);
+
+        if (strcmp(categoria, "Tecnologia") == 0 || strcmp(categoria, "tecnologia") == 0)
+        {
+            if(quant_tec <= 0)
+            {
+                char resp[10];
+                printf("\nestoque de tecnologia vazio.\nDeseja listar outra categoria?\n");
+                fgets(resp, sizeof(resp), stdin);
+                remover_newline(resp);
+
+                if(strcmp(resp, "sim") == 0 || strcmp(resp, "Sim") == 0)
+                {
+                    listar_produto();
+                    return;
+                }
+                else
+                {
+                    printf("\nVoltando ao menu...\n\n");
+                    sleep(1.2);
+                    menu();
+                    return;
+                }
+            }
+            printf("Lista dos produtos de tecnologia:\n\n");
+            for (int i = 0; i < quant_tec; i++)
+            {
+                printf("nome do produto: %s \npreço do produto: %.2f\n\n", estoque.tecnologia[i].nome, estoque.tecnologia[i].preco);
+            }
+
+            printf("Pressione qualquer tecla para continuar...\n");
+            getch();
+            //continue;
+        }
+        else
+        {
+            printf("\nCategoria digitada invalida ou inexistente.\nVoltando ao menu...\n\n");
+            sleep(1.2);
             menu();
+            return;
         }
-        }while(strcmp(resposta, "sim") == 0);
-        menu();
-    }
-    else if(strcmp(cat, "cosmetico") == 0)
-    {
 
-    }
-    else if(strcmp(cat, "alimenticia") == 0)
-    {
+        printf("\nDeseja listar mais alguma categoria de produtos?\n");
+        fgets(resposta, sizeof(resposta), stdin);
+        remover_newline(resposta);
 
-    }else//deu algum problema
-    {
-        printf("Categoria digitada não encontrada.\n\n\n");
-        menu();
-    }
+        if (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0)
+        {
+            continue;
+        }
+        else
+        {
+            printf("Voltando ao menu...");
+            sleep(1.2);
+            menu();
+            return;
+        }
 
+    } while (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0);
+
+    menu();
 }
 
-void listar_produto(){
-    char cat[20];
-    categoria estoque;
+// void atualizar(){
 
-    printf("Digite a categoria do produto:\n");
-    limpar_buffer();
-    fgets(cat, 20, stdin);
-    if(strcmp(cat, "tecnologia") == 0)
-    {
-//verificação de estoque cheio
-        for(int i=0;i<quant_tec;i++){
-            printf("Nome: %s\n", estoque.tecnologia[i].nome);
-            printf("Preço: %f\n", estoque.tecnologia[i].preco);
-        }
-        menu();
-    }
+// void remover_produto(){
 
-}
-
-//void atualizar(){
-
-//void remover_produto(){
-
-
-void menu(){//(process)
+void menu() // função listar produto desabilitada
+{           //(process)
     int opcao;
     do
     {
@@ -154,15 +224,15 @@ void menu(){//(process)
         cadastrar_produto();
         break;
     case 2:
-        //listar_produto();
+        listar_produto();
         break;
     case 3:
-        //atualizar();
+        // atualizar();
         break;
     case 4:
-        //remover_produto();
+        // remover_produto();
         break;
-    case 5://(ok)
+    case 5: //(ok)
         printf("Até logo ;)");
         sleep(1.2);
         exit(1);
