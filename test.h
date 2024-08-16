@@ -192,196 +192,98 @@ void listar_produto() //(process...)
     menu();
 }
 
-void atualizar() // process
-{
+void atualizar() {
     char categoria[20];
+    char resposta[10];
+    int continuar = 1;
 
-//procurar por categoria
-    printf("Digite a categoria do produto:\n- Tecnologia\n- Costemica\n- Alimentecia\n");
-    limpar_buffer();
-    fgets(categoria, sizeof(categoria), stdin);
-    remover_newline(categoria);
+    while (continuar) {
+        printf("\nDigite a categoria do produto que deseja editar:\n- Tecnologia\n- Alimenticia\n- Cosmetico\n:");
+        limpar_buffer();
+        fgets(categoria, sizeof(categoria), stdin);
+        remover_newline(categoria);
 
-    if(strcmp(categoria, "tecnologia") == 0 || strcmp(categoria, "Tecnologia") == 0)
-    {
-        char nome[tam];
+        if (strcmp(categoria, "tecnologia") == 0 || strcmp(categoria, "Tecnologia") == 0) {
+            if (quant_tec <= 0) {
+                printf("\nEstoque de tecnologia vazio.\nDeseja editar outro produto? (sim/não)\n");
+                fgets(resposta, sizeof(resposta), stdin);
+                remover_newline(resposta);
+                continuar = (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0);
+                if (!continuar) {
+                    printf("\nVoltando ao menu...\n");
+                    sleep(1.2);
+                    menu();
+                    return;
+                }
+                continue;
+            }
 
-//verificação de produtos no estoque
-        if(quant_tec <= 0)//(ok)
-        {
-            printf("\nEstoque de tecnologia vazio.\nVoltando para o menu...\n\n");
+            char nome[tam];
+            printf("\nDigite o nome do produto que deseja modificar:\n");
+            fgets(nome, sizeof(nome), stdin);
+            remover_newline(nome);
+
+            int produto_encontrado = 0;
+            for (int i = 0; i < quant_tec; i++) {
+                if (strcmp(nome, estoque.tecnologia[i].nome) == 0) {
+                    produto_encontrado = 1;
+                    char mudanca[30];
+                    printf("\nO que deseja mudar?\n- Nome\n- Preço\n");
+                    fgets(mudanca, sizeof(mudanca), stdin);
+                    remover_newline(mudanca);
+
+                    if (strcmp(mudanca, "nome") == 0 || strcmp(mudanca, "Nome") == 0) {
+                        char novo[tam];
+                        printf("\nDigite o novo nome do produto:\n");
+                        fgets(novo, sizeof(novo), stdin);
+                        remover_newline(novo);
+                        strcpy(estoque.tecnologia[i].nome, novo);
+                        printf("\nNome alterado com sucesso!!\n");
+                    } else if (strcmp(mudanca, "preço") == 0 || strcmp(mudanca, "Preço") == 0) {
+                        float preco;
+                        printf("Digite o novo preço do produto:\n");
+                        scanf("%f", &preco);
+                        limpar_buffer(); // Limpa o buffer após scanf
+                        estoque.tecnologia[i].preco = preco;
+                        printf("\nPreço alterado com sucesso!!\n");
+                    } else {
+                        printf("\nAlteração não reconhecida.\n");
+                    }
+
+                    printf("\nDeseja alterar outro produto no estoque de tecnologia? (sim/não)\n");
+                    fgets(resposta, sizeof(resposta), stdin);
+                    remover_newline(resposta);
+                    continuar = (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0);
+                    if (!continuar) {
+                        printf("\nVoltando para o menu...\n");
+                        sleep(1.2);
+                        menu();
+                        return;
+                    }
+                    break;
+                }
+            }
+            if (!produto_encontrado) {
+                printf("\nNome digitado não encontrado.\nDeseja modificar outro produto? (sim/não)\n");
+                fgets(resposta, sizeof(resposta), stdin);
+                remover_newline(resposta);
+                continuar = (strcmp(resposta, "sim") == 0 || strcmp(resposta, "Sim") == 0);
+                if (!continuar) {
+                    printf("\nVoltando ao menu...\n");
+                    sleep(1.2);
+                    menu();
+                    return;
+                }
+            }
+        } else {
+            printf("\nCategoria inválida ou inexistente.\nVoltando ao menu...\n");
             sleep(1.2);
             menu();
             return;
         }
-
-        printf("Digite o nome do produto que deseja atualizar:\n");
-        fgets(nome, sizeof(nome), stdin);
-        remover_newline(nome);
-
-//procurar o produto
-        for(int i=0;i<quant_tec;i++)
-        {
-            char resposta[10];
-
-            if(strcmp(nome, estoque.tecnologia[i].nome) == 0)
-            {
-                printf("Digite oque deseja modificar:\n- Nome\n- Preço\n");
-                
-                fgets(resposta, sizeof(resposta), stdin);
-                remover_newline(resposta);
-
-                if(strcmp(resposta, "Nome") == 0 || strcmp(resposta, "nome") == 0)
-                {
-                    char nome[tam];
-                    printf("Digite o novo nome do produto:\n");
-                    fgets(nome, sizeof(nome), stdin);
-                    remover_newline(nome);
-
-                    strcpy(estoque.tecnologia[i].nome, nome);
-
-                    printf("\nNumero alterado com sucesso!!\nRetornando ao menu...\n\n");
-                    printf("Pressione qualquer tecla para continuar...\n");
-                    getch();
-
-                    sleep(1.2);
-                    menu();
-                    return;
-                }
-                else if(strcmp(resposta, "Preco") == 0 || strcmp(resposta, "preco") == 0)
-                {
-                    float preco;
-
-                    printf("Digite o novo preço do produto:\n");
-                    scanf("%f", &preco);
-
-                    estoque.tecnologia[i].preco = preco;
-
-                    printf("\nNumero alterado com sucesso!!\nRetornando ao menu...\n\n");
-                    printf("Pressione qualquer tecla para continuar...\n");
-                    getch();
-
-                    sleep(1.2);
-                    menu();
-                    return;
-                }
-            }
-            else
-            {
-                printf("\nNome do produto não encontrado.\nVoltando ao menu...\n\n");
-                sleep(1.2);
-                menu();
-                return;
-            }
-        }
-    }
-    else//(ok)
-    {
-        printf("\nCategoria informada inválida ou inexistente.\nVoltando ao menu...\n\n");
-        sleep(1.2);
-        menu();
-        return;
     }
 }
 
-void remover_produto()
-{
-    char categoria[40];
-
-    printf("Digite a categoria do produto que deseja excluir:\n- Tecnologia\n- Cosmetico\n- Alimenticia\n");
-    limpar_buffer();
-    fgets(categoria, sizeof(categoria), stdin);
-    remover_newline(categoria);
-
-    if(strcmp(categoria, "tecnologia") == 0 || strcmp(categoria, "Tecnologia") == 0)
-    {
-        char nome[tam];
-
-        printf("Digite o nome do produto que deseja excluir:\n");
-        fgets(nome, sizeof(nome), stdin);
-        remover_newline(nome);
-
-        for(int i=0;i<quant_tec;i++)
-        {
-            if(strcmp(nome, estoque.tecnologia[i].nome) == 0)
-            {
-                char resp[10];
-
-                printf("Tem certeza que deseja excluir o produto?:\n%s\n%.2f\n", estoque.tecnologia[i].nome, estoque.tecnologia[i].preco);
-                fgets(resp, sizeof(resp), stdin);
-                remover_newline(resp);
-
-                if(strcmp(resp, "sim") == 0 || strcmp(resp, "Sim") == 0)
-                {
-                    for(int j = i; j < quant_tec - 1; j++)
-                    {
-                        estoque.tecnologia[j] = estoque.tecnologia[j + 1];
-                    }
-                    quant_tec--;
-
-                    printf("Produto excluido com sucesso!!\nVoltando ao menu...\n\n");
-                    sleep(1.2);
-                    menu();
-                    return;
-                }
-                else
-                {
-                    printf("Voltando ao menu...\n\n");
-                    sleep(1.2);
-                    menu();
-                    return;
-                }
-            }
-        }
-
-    }
-    else
-    {
-        printf("Categoria digitada inválida ou inexistente.\nVoltando ao menu...");
-        sleep(1.2);
-        menu();
-        return;
-    }
-}
+// void remover_produto()//(incompleted)
 
 void menu() //(process)
-{
-    int opcao;
-    do
-    {
-        printf("Sistema de cadastro de produtos.\n\n");
-        sleep(1.2);
-        printf("Escolha uma das opções abaixo:\n");
-        printf("1) Cadastrar produto em estoque.\n");
-        printf("2) Listar produtos cadastrados.\n");
-        printf("3) Atualizar informações do produto.\n");
-        printf("4) Remover produto do estoque.\n");
-        printf("5) Sair.\n");
-        scanf("%d", &opcao);
-        // verificação de numero inteiro
-        if (opcao <= 0 || opcao >= 6)
-        {
-            printf("Numero digitado inválido!\nTente novamente\n");
-        }
-    } while (opcao <= 0 || opcao >= 6);
-
-    switch (opcao)
-    {
-    case 1:
-        cadastrar_produto();
-        break;
-    case 2:
-        listar_produto();
-        break;
-    case 3:
-        atualizar();
-        break;
-    case 4:
-        remover_produto();
-        break;
-    case 5:
-        printf("Até logo ;)");
-        sleep(1.2);
-        exit(1);
-    }
-}
