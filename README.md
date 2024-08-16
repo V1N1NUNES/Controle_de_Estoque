@@ -39,3 +39,7 @@ O projeto é composto pelos seguintes arquivos principais:
 ## Melhorias futuras
 
 -`Verificações`: Optar por mais verificações na entrada padrão, para maior e melhor controle sobre o usuário, e melhor desempenho do sistema. 
+
+## Avisos
+
+- Erros na funcionalidade do programa seram corrijidos em atualizações futuras.
