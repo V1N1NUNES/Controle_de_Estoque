@@ -1,4 +1,4 @@
-# -- Project --
+# -- Cadastros --
 # Sistema de Cadastro de Produtos
 
 Este projeto é um sistema de cadastro de produtos na linguagem C, que permite ao usuário cadastrar, listar, atualizar e remover produtos em diferentes categorias: Tecnologia, Cosmético e Alimentício.
