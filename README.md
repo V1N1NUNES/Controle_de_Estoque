@@ -37,8 +37,10 @@ O projeto é composto pelos seguintes arquivos principais:
 
 
 ## Melhorias futuras
-
--`Verificações`: Optar por mais verificações na entrada padrão, para maior e melhor controle sobre o usuário, e melhor desempenho do sistema. 
+- Adição de outras funcionalidades para melhor gestão de produtos
+- Mudança de ambiente de sistema
+- Integração com banco de dados
+- Front-end intuitivo
 
 ## Avisos
 
