@@ -1,0 +1,28 @@
+{
+  "name": "store-ease",
+  "version": "1.0.0",
+  "description": "Aplication for chash and money controller",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/V1N1NUNES/Store-Ease.git"
+  },
+  "keywords": [
+    "controle",
+    "finanças",
+    "gastos"
+  ],
+  "author": "Vinícius",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/V1N1NUNES/Store-Ease/issues"
+  },
+  "homepage": "https://github.com/V1N1NUNES/Store-Ease#readme",
+  "dependencies": {
+    "fastify": "^5.2.0",
+    "nodemon": "^3.1.9"
+  }
+}
